@@ -2,7 +2,6 @@ import { EventEmitter } from 'events';
 import * as net from 'net';
 import {
     buildAckMessage,
-    buildBinaryAck,
     buildPollMessage,
     extractFrames,
     parseStatusFrame,
@@ -43,7 +42,7 @@ export class EnvertechClient extends EventEmitter {
             serial: options.serial,
             pollIntervalMs: options.pollIntervalMs ?? 60_000,
             reconnectIntervalMs: options.reconnectIntervalMs ?? 30_000,
-            idleTimeoutMs: options.idleTimeoutMs ?? 180_000,
+            idleTimeoutMs: options.idleTimeoutMs ?? 300_000,
             log: options.log,
         };
     }
@@ -88,25 +87,23 @@ export class EnvertechClient extends EventEmitter {
         });
         socket.on('close', () => {
             this.log('info', 'Connection closed');
-            this.socket = undefined;
-            this.setConnected(false);
-            this.scheduleReconnect();
+            this.handleDisconnect();
         });
     }
 
     private onData(chunk: Buffer): void {
-        this.armIdle();
         this.log('debug', `RX ${chunk.length} bytes: ${chunk.toString('hex')}`);
         this.buffer = Buffer.from(Buffer.concat([this.buffer, chunk]));
         const { frames, rest } = extractFrames(this.buffer);
         this.buffer = Buffer.from(rest);
         for (const frame of frames) {
-            this.sendAck(frame);
             const reading = parseStatusFrame(frame);
             if (!reading) {
-                this.log('debug', `Ignored frame (${frame.length} bytes) ${frame.toString('hex')}`);
+                this.log('info', `Handshake/status frame (${frame.length} bytes), waiting for live data`);
                 continue;
             }
+            this.armIdle();
+            this.sendAck();
             this.emit('data', reading);
         }
     }
@@ -115,11 +112,8 @@ export class EnvertechClient extends EventEmitter {
         this.write(buildPollMessage(this.options.serial), 'poll');
     }
 
-    private sendAck(frame: Buffer): void {
+    private sendAck(): void {
         this.write(buildAckMessage(this.options.serial), 'ack');
-        if (frame.length >= 24) {
-            this.write(buildBinaryAck(frame.subarray(20, 24)), 'binary-ack');
-        }
     }
 
     private write(payload: Buffer, label: string): void {
@@ -158,19 +152,29 @@ export class EnvertechClient extends EventEmitter {
     private armIdle(): void {
         this.clearTimer('idle');
         this.idleTimer = setTimeout(() => {
-            this.log('warn', 'No data from inverter, reconnecting');
+            this.log('warn', 'No live data from inverter, reconnecting');
             this.closeSocket();
         }, this.options.idleTimeoutMs);
     }
 
     private closeSocket(): void {
         if (!this.socket) {
+            this.handleDisconnect();
             return;
         }
         const socket = this.socket;
         this.socket = undefined;
         socket.removeAllListeners();
         socket.destroy();
+        this.handleDisconnect();
+    }
+
+    private handleDisconnect(): void {
+        this.socket = undefined;
+        this.clearTimer('poll');
+        this.clearTimer('idle');
+        this.setConnected(false);
+        this.scheduleReconnect();
     }
 
     private setConnected(connected: boolean): void {

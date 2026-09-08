@@ -1,6 +1,6 @@
 {
     "name": "iobroker.envertech-local",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "description": "Read Envertech microinverters locally over TCP, without the cloud",
     "author": {
         "name": "Andreas"

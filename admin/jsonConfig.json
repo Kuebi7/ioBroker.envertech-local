@@ -50,7 +50,7 @@
             "label": "pollInterval",
             "min": 15,
             "max": 300,
-            "default": 60,
+            "default": 30,
             "newLine": true,
             "xs": 12,
             "sm": 12,

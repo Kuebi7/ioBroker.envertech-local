@@ -67,6 +67,8 @@ class EnvertechLocal extends utils.Adapter {
         }
         this.energy = await this.loadEnergySnapshot();
         await this.ensureBaseObjects();
+        await this.setStateAsync('info.inverterId', { val: serial, ack: true });
+        this.log.info(`Starting local read of ${host}:${port} (MID ${serial})`);
         this.client = new client_1.EnvertechClient({
             host,
             port,
@@ -74,7 +76,18 @@ class EnvertechLocal extends utils.Adapter {
             pollIntervalMs: Math.max(15, Number(this.config.pollInterval) || 60) * 1000,
             reconnectIntervalMs: Math.max(10, Number(this.config.reconnectInterval) || 30) * 1000,
             log: (level, message) => {
-                this.log[level](message);
+                if (level === 'debug') {
+                    this.log.debug(message);
+                }
+                else if (level === 'warn') {
+                    this.log.warn(message);
+                }
+                else if (level === 'error') {
+                    this.log.error(message);
+                }
+                else {
+                    this.log.info(message);
+                }
             },
         });
         this.client.on('connection', (online) => {
@@ -114,7 +127,7 @@ class EnvertechLocal extends utils.Adapter {
             await this.setStateAsync(`${prefix}.frequency`, { val: module.frequency, ack: true });
             await this.setStateAsync(`${prefix}.current`, { val: module.current, ack: true });
         }
-        this.log.debug(`Updated ${reading.modules.length} module(s): ${reading.power} W, ${reading.energy} kWh`);
+        this.log.info(`Live data: ${reading.power} W, ${reading.energy} kWh, ${reading.modules.length} module(s)`);
     }
     async setOfflinePower() {
         const power = await this.getStateAsync('inverter.power');

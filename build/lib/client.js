@@ -54,7 +54,7 @@ class EnvertechClient extends events_1.EventEmitter {
             serial: options.serial,
             pollIntervalMs: options.pollIntervalMs ?? 60_000,
             reconnectIntervalMs: options.reconnectIntervalMs ?? 30_000,
-            idleTimeoutMs: options.idleTimeoutMs ?? 180_000,
+            idleTimeoutMs: options.idleTimeoutMs ?? 300_000,
             log: options.log,
         };
     }
@@ -96,35 +96,30 @@ class EnvertechClient extends events_1.EventEmitter {
         });
         socket.on('close', () => {
             this.log('info', 'Connection closed');
-            this.socket = undefined;
-            this.setConnected(false);
-            this.scheduleReconnect();
+            this.handleDisconnect();
         });
     }
     onData(chunk) {
-        this.armIdle();
         this.log('debug', `RX ${chunk.length} bytes: ${chunk.toString('hex')}`);
         this.buffer = Buffer.from(Buffer.concat([this.buffer, chunk]));
         const { frames, rest } = (0, protocol_1.extractFrames)(this.buffer);
         this.buffer = Buffer.from(rest);
         for (const frame of frames) {
-            this.sendAck(frame);
             const reading = (0, protocol_1.parseStatusFrame)(frame);
             if (!reading) {
-                this.log('debug', `Ignored frame (${frame.length} bytes) ${frame.toString('hex')}`);
+                this.log('info', `Handshake/status frame (${frame.length} bytes), waiting for live data`);
                 continue;
             }
+            this.armIdle();
+            this.sendAck();
             this.emit('data', reading);
         }
     }
     sendPoll() {
         this.write((0, protocol_1.buildPollMessage)(this.options.serial), 'poll');
     }
-    sendAck(frame) {
+    sendAck() {
         this.write((0, protocol_1.buildAckMessage)(this.options.serial), 'ack');
-        if (frame.length >= 24) {
-            this.write((0, protocol_1.buildBinaryAck)(frame.subarray(20, 24)), 'binary-ack');
-        }
     }
     write(payload, label) {
         if (!this.socket || this.socket.destroyed) {
@@ -159,18 +154,27 @@ class EnvertechClient extends events_1.EventEmitter {
     armIdle() {
         this.clearTimer('idle');
         this.idleTimer = setTimeout(() => {
-            this.log('warn', 'No data from inverter, reconnecting');
+            this.log('warn', 'No live data from inverter, reconnecting');
             this.closeSocket();
         }, this.options.idleTimeoutMs);
     }
     closeSocket() {
         if (!this.socket) {
+            this.handleDisconnect();
             return;
         }
         const socket = this.socket;
         this.socket = undefined;
         socket.removeAllListeners();
         socket.destroy();
+        this.handleDisconnect();
+    }
+    handleDisconnect() {
+        this.socket = undefined;
+        this.clearTimer('poll');
+        this.clearTimer('idle');
+        this.setConnected(false);
+        this.scheduleReconnect();
     }
     setConnected(connected) {
         if (this.connected === connected) {

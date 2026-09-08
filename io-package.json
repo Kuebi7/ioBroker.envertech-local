@@ -1,8 +1,12 @@
 {
     "common": {
         "name": "envertech-local",
-        "version": "0.1.0",
+        "version": "0.1.1",
         "news": {
+            "0.1.1": {
+                "en": "Fix reconnect after timeout and empty inverterId until first live frame",
+                "de": "Reconnect nach Timeout repariert, Inverter-ID wird sofort aus der MID gesetzt"
+            },
             "0.1.0": {
                 "en": "Initial release: local TCP readout without cloud",
                 "de": "Erstes Release: lokales TCP-Auslesen ohne Cloud"
@@ -75,7 +79,7 @@
         "host": "192.168.1.241",
         "port": 14889,
         "serial": "30819660",
-        "pollInterval": 60,
+        "pollInterval": 30,
         "reconnectInterval": 30
     },
     "objects": [],
