@@ -1,0 +1,72 @@
+{
+    "type": "panel",
+    "i18n": true,
+    "items": {
+        "header": {
+            "type": "header",
+            "text": "Envertech local TCP",
+            "size": 2
+        },
+        "hint": {
+            "type": "staticText",
+            "newLine": true,
+            "text": "hint",
+            "xs": 12,
+            "sm": 12,
+            "md": 12,
+            "lg": 12
+        },
+        "host": {
+            "type": "text",
+            "label": "host",
+            "newLine": true,
+            "xs": 12,
+            "sm": 12,
+            "md": 6,
+            "lg": 4
+        },
+        "port": {
+            "type": "number",
+            "label": "port",
+            "min": 1,
+            "max": 65535,
+            "default": 14889,
+            "xs": 12,
+            "sm": 12,
+            "md": 6,
+            "lg": 4
+        },
+        "serial": {
+            "type": "text",
+            "label": "serial",
+            "help": "serialHelp",
+            "xs": 12,
+            "sm": 12,
+            "md": 6,
+            "lg": 4
+        },
+        "pollInterval": {
+            "type": "number",
+            "label": "pollInterval",
+            "min": 15,
+            "max": 300,
+            "default": 60,
+            "newLine": true,
+            "xs": 12,
+            "sm": 12,
+            "md": 6,
+            "lg": 4
+        },
+        "reconnectInterval": {
+            "type": "number",
+            "label": "reconnectInterval",
+            "min": 10,
+            "max": 300,
+            "default": 30,
+            "xs": 12,
+            "sm": 12,
+            "md": 6,
+            "lg": 4
+        }
+    }
+}

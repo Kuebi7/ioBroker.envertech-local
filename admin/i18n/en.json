@@ -1,0 +1,10 @@
+{
+    "Envertech local TCP": "Envertech local TCP",
+    "hint": "The inverter must be on your LAN and set to TCP Server on port 14889 under Other Setting. The web UI at the IP is only Wi-Fi configuration, not live values. At night the device is often unreachable.",
+    "host": "IP address",
+    "port": "TCP port",
+    "serial": "Serial / MID",
+    "serialHelp": "8-digit MID from the local web UI, e.g. 30819660",
+    "pollInterval": "Poll interval (seconds)",
+    "reconnectInterval": "Reconnect interval (seconds)"
+}

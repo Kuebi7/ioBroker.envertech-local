@@ -1,0 +1,105 @@
+{
+    "common": {
+        "name": "envertech-local",
+        "version": "0.1.0",
+        "news": {
+            "0.1.0": {
+                "en": "Initial release: local TCP readout without cloud",
+                "de": "Erstes Release: lokales TCP-Auslesen ohne Cloud"
+            }
+        },
+        "titleLang": {
+            "en": "Envertech Local",
+            "de": "Envertech Lokal",
+            "ru": "Envertech Local",
+            "pt": "Envertech Local",
+            "nl": "Envertech Local",
+            "fr": "Envertech Local",
+            "it": "Envertech Local",
+            "es": "Envertech Local",
+            "pl": "Envertech Local",
+            "uk": "Envertech Local",
+            "zh-cn": "Envertech Local"
+        },
+        "desc": {
+            "en": "Read Envertech microinverters locally via TCP (no cloud)",
+            "de": "Envertech-Mikrowechselrichter lokal per TCP auslesen (ohne Cloud)",
+            "ru": "Read Envertech microinverters locally via TCP (no cloud)",
+            "pt": "Read Envertech microinverters locally via TCP (no cloud)",
+            "nl": "Read Envertech microinverters locally via TCP (no cloud)",
+            "fr": "Read Envertech microinverters locally via TCP (no cloud)",
+            "it": "Read Envertech microinverters locally via TCP (no cloud)",
+            "es": "Read Envertech microinverters locally via TCP (no cloud)",
+            "pl": "Read Envertech microinverters locally via TCP (no cloud)",
+            "uk": "Read Envertech microinverters locally via TCP (no cloud)",
+            "zh-cn": "Read Envertech microinverters locally via TCP (no cloud)"
+        },
+        "authors": ["Andreas"],
+        "keywords": ["envertech", "envertec", "evt800", "microinverter", "pv", "solar"],
+        "licenseInformation": {
+            "license": "MIT",
+            "type": "free"
+        },
+        "platform": "Javascript/Node.js",
+        "mode": "daemon",
+        "icon": "envertech-local.svg",
+        "extIcon": "https://raw.githubusercontent.com/Kuebi7/ioBroker.envertech-local/main/admin/envertech-local.svg",
+        "readme": "https://github.com/Kuebi7/ioBroker.envertech-local/blob/main/README.md",
+        "loglevel": "info",
+        "tier": 3,
+        "adminUI": {
+            "config": "json"
+        },
+        "type": "energy",
+        "compact": true,
+        "enabled": true,
+        "connectionType": "local",
+        "dataSource": "push",
+        "osDependencies": {
+            "linux": [],
+            "darwin": [],
+            "win32": []
+        },
+        "dependencies": [
+            {
+                "js-controller": ">=5.0.19"
+            }
+        ],
+        "globalDependencies": [
+            {
+                "admin": ">=6.17.12"
+            }
+        ]
+    },
+    "native": {
+        "host": "192.168.1.241",
+        "port": 14889,
+        "serial": "30819660",
+        "pollInterval": 60,
+        "reconnectInterval": 30
+    },
+    "objects": [],
+    "instanceObjects": [
+        {
+            "_id": "info",
+            "type": "channel",
+            "common": {
+                "name": "Information"
+            },
+            "native": {}
+        },
+        {
+            "_id": "info.connection",
+            "type": "state",
+            "common": {
+                "role": "indicator.connected",
+                "name": "Connected to inverter",
+                "type": "boolean",
+                "read": true,
+                "write": false,
+                "def": false
+            },
+            "native": {}
+        }
+    ]
+}

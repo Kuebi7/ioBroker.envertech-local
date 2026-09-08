@@ -1,0 +1,10 @@
+{
+    "Envertech local TCP": "Envertech lokal über TCP",
+    "hint": "Der Wechselrichter muss im WLAN hängen und unter Other Setting als TCP Server auf Port 14889 laufen. Die Webseite unter der IP ist nur die WLAN-Konfiguration, keine Live-Werte. Nachts ist das Gerät oft nicht erreichbar.",
+    "host": "IP-Adresse",
+    "port": "TCP-Port",
+    "serial": "Seriennummer / MID",
+    "serialHelp": "8-stellige MID aus der lokalen Weboberfläche, z. B. 30819660",
+    "pollInterval": "Abfrageintervall (Sekunden)",
+    "reconnectInterval": "Reconnect-Intervall (Sekunden)"
+}
