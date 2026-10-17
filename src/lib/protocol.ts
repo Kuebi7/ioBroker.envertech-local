@@ -144,11 +144,7 @@ function tryDecodeLeadingHex(data: Buffer): Buffer | null {
 }
 
 function isHexChar(value: number): boolean {
-    return (
-        (value >= 0x30 && value <= 0x39) ||
-        (value >= 0x41 && value <= 0x46) ||
-        (value >= 0x61 && value <= 0x66)
-    );
+    return (value >= 0x30 && value <= 0x39) || (value >= 0x41 && value <= 0x46) || (value >= 0x61 && value <= 0x66);
 }
 
 export function parseStatusFrame(frame: Buffer): InverterReading | null {
@@ -174,8 +170,14 @@ export function parseStatusFrame(frame: Buffer): InverterReading | null {
         return null;
     }
 
-    const power = round(modules.reduce((sum, module) => sum + module.power, 0), 1);
-    const energy = round(modules.reduce((sum, module) => sum + module.energy, 0), 2);
+    const power = round(
+        modules.reduce((sum, module) => sum + module.power, 0),
+        1,
+    );
+    const energy = round(
+        modules.reduce((sum, module) => sum + module.energy, 0),
+        2,
+    );
     return { inverterId, modules, power, energy };
 }
 

@@ -1,6 +1,6 @@
 {
     "name": "iobroker.envertech-local",
-    "version": "0.1.1",
+    "version": "0.1.2",
     "description": "Read Envertech microinverters locally over TCP, without the cloud",
     "author": {
         "name": "Andreas"
@@ -21,18 +21,22 @@
         "url": "https://github.com/Kuebi7/ioBroker.envertech-local.git"
     },
     "engines": {
-        "node": ">= 20"
+        "node": ">= 22"
     },
     "dependencies": {
-        "@iobroker/adapter-core": "^3.3.2"
+        "@iobroker/adapter-core": "^3.4.3"
     },
     "devDependencies": {
-        "@tsconfig/node20": "^20.1.9",
-        "@types/chai": "^4.3.20",
-        "@types/mocha": "^10.0.10",
-        "@types/node": "^20.19.0",
-        "chai": "^4.5.0",
-        "mocha": "^11.7.1",
+        "@alcalzone/release-script": "^5.2.1",
+        "@alcalzone/release-script-plugin-iobroker": "^5.2.0",
+        "@alcalzone/release-script-plugin-license": "^5.2.2",
+        "@alcalzone/release-script-plugin-manual-review": "^5.2.0",
+        "@iobroker/adapter-dev": "^1.5.0",
+        "@iobroker/eslint-config": "^2.3.4",
+        "@iobroker/testing": "^6.3.1",
+        "@tsconfig/node22": "^22.0.6",
+        "@types/node": "^22.20.5",
+        "rimraf": "^6.1.2",
         "source-map-support": "^0.5.21",
         "ts-node": "^10.9.2",
         "typescript": "~5.9.3"
@@ -45,10 +49,19 @@
         "LICENSE"
     ],
     "scripts": {
-        "build": "tsc -p tsconfig.build.json",
-        "check": "tsc --noEmit",
-        "test": "mocha --config test/mocharc.custom.json src/**/*.test.ts",
-        "read": "ts-node src/read-once.ts"
+        "prebuild": "rimraf build",
+        "build": "build-adapter ts",
+        "watch": "build-adapter ts --watch",
+        "build:ts": "build-adapter ts",
+        "watch:ts": "build-adapter ts --watch",
+        "test:ts": "mocha --config test/mocharc.custom.json src/**/*.test.ts",
+        "test:package": "mocha test/package --exit",
+        "test:integration": "mocha test/integration --exit",
+        "test": "npm run test:ts",
+        "check": "tsc --noEmit -p tsconfig.json",
+        "lint": "eslint -c eslint.config.mjs .",
+        "release": "release-script",
+        "read": "ts-node tools/read-once.ts"
     },
     "bugs": {
         "url": "https://github.com/Kuebi7/ioBroker.envertech-local/issues"

@@ -1,5 +1,5 @@
 import * as utils from '@iobroker/adapter-core';
-import { EnvertechClient, type InverterReading } from './lib/client';
+import { EnvertechClient, type Clock, type InverterReading } from './lib/client';
 import { type EnergySnapshot, updateDailyEnergy } from './lib/energy';
 import { normalizeSerial } from './lib/protocol';
 
@@ -46,6 +46,7 @@ class EnvertechLocal extends utils.Adapter {
             serial,
             pollIntervalMs: Math.max(15, Number(this.config.pollInterval) || 60) * 1000,
             reconnectIntervalMs: Math.max(10, Number(this.config.reconnectInterval) || 30) * 1000,
+            clock: this.trackedClock(),
             log: (level, message) => {
                 if (level === 'debug') {
                     this.log.debug(message);
@@ -58,19 +59,33 @@ class EnvertechLocal extends utils.Adapter {
                 }
             },
         });
-        this.client.on('connection', (online) => {
+        this.client.on('connection', online => {
             void this.setState('info.connection', online, true);
             if (!online && !this.unloading) {
                 void this.setOfflinePower();
             }
         });
-        this.client.on('data', (reading) => {
+        this.client.on('data', reading => {
             void this.publish(reading);
         });
-        this.client.on('error', (error) => {
+        this.client.on('error', error => {
             this.log.warn(error.message);
         });
         this.client.start();
+    }
+
+    /** Adapter-owned timers so compact mode clears them when the instance stops. */
+    private trackedClock(): Clock {
+        return {
+            interval: (handler, ms) => this.setInterval(handler, ms),
+            cancelInterval: handle => {
+                this.clearInterval(handle as ioBroker.Interval | undefined);
+            },
+            timeout: (handler, ms) => this.setTimeout(handler, ms),
+            cancelTimeout: handle => {
+                this.clearTimeout(handle as ioBroker.Timeout | undefined);
+            },
+        };
     }
 
     private async publish(reading: InverterReading): Promise<void> {
@@ -97,9 +112,7 @@ class EnvertechLocal extends utils.Adapter {
             await this.setStateAsync(`${prefix}.frequency`, { val: module.frequency, ack: true });
             await this.setStateAsync(`${prefix}.current`, { val: module.current, ack: true });
         }
-        this.log.info(
-            `Live data: ${reading.power} W, ${reading.energy} kWh, ${reading.modules.length} module(s)`,
-        );
+        this.log.info(`Live data: ${reading.power} W, ${reading.energy} kWh, ${reading.modules.length} module(s)`);
     }
 
     private async setOfflinePower(): Promise<void> {

@@ -9,5 +9,5 @@
         "declaration": false
     },
     "include": ["src/**/*.ts"],
-    "exclude": ["src/**/*.test.ts", "src/read-once.ts"]
+    "exclude": ["src/**/*.test.ts"]
 }

@@ -1,23 +1,14 @@
 /// <reference types="mocha" />
 import { expect } from 'chai';
-import {
-    buildAckMessage,
-    buildPollMessage,
-    extractFrames,
-    parseStatusFrame,
-} from './protocol';
+import { buildAckMessage, buildPollMessage, extractFrames, parseStatusFrame } from './protocol';
 
 const SAMPLE_STATUS_HEX =
     '68005668105132323232700179000000000000003232323270792f4700e6000349dc22b33a7e31f8020000000000000000000000323232337079302b00e40002c7f623193a7e31f80200000000000000000000009b16';
 
 describe('protocol', () => {
     it('builds OpenEVT poll and ack messages', () => {
-        expect(buildPollMessage('30819660').toString('ascii')).to.equal(
-            '68001068107730819660000000009f16',
-        );
-        expect(buildAckMessage('30819660').toString('ascii')).to.equal(
-            '68001068105030819660000000007816',
-        );
+        expect(buildPollMessage('30819660').toString('ascii')).to.equal('68001068107730819660000000009f16');
+        expect(buildAckMessage('30819660').toString('ascii')).to.equal('68001068105030819660000000007816');
     });
 
     it('rejects invalid serial numbers', () => {

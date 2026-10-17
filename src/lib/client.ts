@@ -1,12 +1,37 @@
-import { EventEmitter } from 'events';
-import * as net from 'net';
-import {
-    buildAckMessage,
-    buildPollMessage,
-    extractFrames,
-    parseStatusFrame,
-    type InverterReading,
-} from './protocol';
+import { EventEmitter } from 'node:events';
+import * as net from 'node:net';
+import * as timers from 'node:timers';
+import { buildAckMessage, buildPollMessage, extractFrames, parseStatusFrame, type InverterReading } from './protocol';
+
+/** Handles returned by either Node.js or the ioBroker adapter timer API. */
+export type TimerHandle = unknown;
+
+/**
+ * Timer functions used by the TCP client.
+ * The adapter passes `this.setInterval` / `this.setTimeout` so compact mode can stop them.
+ */
+export interface Clock {
+    interval(handler: () => void, ms: number): TimerHandle;
+    cancelInterval(handle: TimerHandle): void;
+    timeout(handler: () => void, ms: number): TimerHandle;
+    cancelTimeout(handle: TimerHandle): void;
+}
+
+/** Node.js timers for the standalone readout tool. The adapter must pass its own clock. */
+export const nodeClock: Clock = {
+    interval(handler, ms) {
+        return timers.setInterval(handler, ms);
+    },
+    cancelInterval(handle) {
+        timers.clearInterval(handle as NodeJS.Timeout);
+    },
+    timeout(handler, ms) {
+        return timers.setTimeout(handler, ms);
+    },
+    cancelTimeout(handle) {
+        timers.clearTimeout(handle as NodeJS.Timeout);
+    },
+};
 
 export interface ClientOptions {
     host: string;
@@ -15,6 +40,7 @@ export interface ClientOptions {
     pollIntervalMs?: number;
     reconnectIntervalMs?: number;
     idleTimeoutMs?: number;
+    clock?: Clock;
     log?: (level: 'debug' | 'info' | 'warn' | 'error', message: string) => void;
 }
 
@@ -25,17 +51,19 @@ export interface EnvertechClientEvents {
 }
 
 export class EnvertechClient extends EventEmitter {
-    private readonly options: Required<Omit<ClientOptions, 'log'>> & Pick<ClientOptions, 'log'>;
+    private readonly options: Required<Omit<ClientOptions, 'log' | 'clock'>> & Pick<ClientOptions, 'log'>;
+    private readonly clock: Clock;
     private socket?: net.Socket;
     private buffer = Buffer.alloc(0);
     private stopped = false;
     private connected = false;
-    private pollTimer?: NodeJS.Timeout;
-    private reconnectTimer?: NodeJS.Timeout;
-    private idleTimer?: NodeJS.Timeout;
+    private pollTimer?: TimerHandle;
+    private reconnectTimer?: TimerHandle;
+    private idleTimer?: TimerHandle;
 
     public constructor(options: ClientOptions) {
         super();
+        this.clock = options.clock ?? nodeClock;
         this.options = {
             host: options.host,
             port: options.port,
@@ -129,7 +157,7 @@ export class EnvertechClient extends EventEmitter {
         if (this.options.pollIntervalMs <= 0) {
             return;
         }
-        this.pollTimer = setInterval(() => {
+        this.pollTimer = this.clock.interval(() => {
             if (this.connected) {
                 this.sendPoll();
             }
@@ -143,7 +171,7 @@ export class EnvertechClient extends EventEmitter {
         if (this.stopped) {
             return;
         }
-        this.reconnectTimer = setTimeout(() => {
+        this.reconnectTimer = this.clock.timeout(() => {
             this.reconnectTimer = undefined;
             this.connect();
         }, this.options.reconnectIntervalMs);
@@ -151,7 +179,7 @@ export class EnvertechClient extends EventEmitter {
 
     private armIdle(): void {
         this.clearTimer('idle');
-        this.idleTimer = setTimeout(() => {
+        this.idleTimer = this.clock.timeout(() => {
             this.log('warn', 'No live data from inverter, reconnecting');
             this.closeSocket();
         }, this.options.idleTimeoutMs);
@@ -192,16 +220,16 @@ export class EnvertechClient extends EventEmitter {
     }
 
     private clearTimer(name: 'poll' | 'reconnect' | 'idle'): void {
-        if (name === 'poll' && this.pollTimer) {
-            clearInterval(this.pollTimer);
+        if (name === 'poll' && this.pollTimer != null) {
+            this.clock.cancelInterval(this.pollTimer);
             this.pollTimer = undefined;
         }
-        if (name === 'reconnect' && this.reconnectTimer) {
-            clearTimeout(this.reconnectTimer);
+        if (name === 'reconnect' && this.reconnectTimer != null) {
+            this.clock.cancelTimeout(this.reconnectTimer);
             this.reconnectTimer = undefined;
         }
-        if (name === 'idle' && this.idleTimer) {
-            clearTimeout(this.idleTimer);
+        if (name === 'idle' && this.idleTimer != null) {
+            this.clock.cancelTimeout(this.idleTimer);
             this.idleTimer = undefined;
         }
     }

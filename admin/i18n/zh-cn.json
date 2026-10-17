@@ -1,0 +1,10 @@
+{
+    "Envertech local TCP": "Envertech 本地 TCP",
+    "hint": "逆变器必须位于局域网中，并在 Other Setting 中设置为 TCP Server，端口为 14889。该 IP 上的网页只包含无线网络配置，不显示实时数据。夜间设备经常无法连接。",
+    "host": "IP 地址",
+    "port": "TCP 端口",
+    "serial": "序列号 / MID",
+    "serialHelp": "本地网页上的八位 MID，例如 30819660",
+    "pollInterval": "轮询间隔（秒）",
+    "reconnectInterval": "重连间隔（秒）"
+}

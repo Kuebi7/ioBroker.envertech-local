@@ -9,6 +9,7 @@ nbproject
 iobroker.*.tgz
 Thumbs.db
 .commitinfo
+iob_npm.done
 coverage
 
 admin/i18n/flat.txt

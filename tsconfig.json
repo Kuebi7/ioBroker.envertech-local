@@ -1,5 +1,5 @@
 {
-    "extends": "@tsconfig/node20/tsconfig.json",
+    "extends": "@tsconfig/node22/tsconfig.json",
     "compilerOptions": {
         "noEmit": true,
         "allowJs": true,
@@ -11,6 +11,6 @@
         "sourceMap": true,
         "inlineSourceMap": false
     },
-    "include": ["src/**/*.ts", "test/**/*.ts"],
+    "include": ["src/**/*.ts", "test/**/*.ts", "tools/**/*.ts"],
     "exclude": ["build/**", "node_modules/**"]
 }
