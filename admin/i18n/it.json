@@ -1,0 +1,10 @@
+{
+    "Envertech local TCP": "Envertech su TCP locale",
+    "hint": "L'inverter deve essere nella rete locale e impostato come TCP Server sulla porta 14889 in Other Setting. La pagina web all'indirizzo IP mostra solo la configurazione Wi-Fi, non i valori in tempo reale. Di notte il dispositivo è spesso irraggiungibile.",
+    "host": "Indirizzo IP",
+    "port": "Porta TCP",
+    "serial": "Numero di serie / MID",
+    "serialHelp": "MID di otto cifre dalla pagina web locale, per esempio 30819660",
+    "pollInterval": "Intervallo di interrogazione (secondi)",
+    "reconnectInterval": "Intervallo di riconnessione (secondi)"
+}

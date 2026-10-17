@@ -1,0 +1,10 @@
+{
+    "Envertech local TCP": "Envertech en TCP local",
+    "hint": "L'onduleur doit être sur le réseau local et réglé en TCP Server sur le port 14889 dans Other Setting. La page web de l'adresse IP ne montre que la configuration Wi-Fi, pas les valeurs en direct. La nuit, l'appareil est souvent injoignable.",
+    "host": "Adresse IP",
+    "port": "Port TCP",
+    "serial": "Numéro de série / MID",
+    "serialHelp": "MID à huit chiffres de la page web locale, par exemple 30819660",
+    "pollInterval": "Intervalle d'interrogation (secondes)",
+    "reconnectInterval": "Intervalle de reconnexion (secondes)"
+}

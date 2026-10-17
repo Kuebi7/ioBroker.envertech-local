@@ -1,5 +1,6 @@
-import { EnvertechClient } from './lib/client';
-import { normalizeSerial } from './lib/protocol';
+import * as timers from 'node:timers';
+import { EnvertechClient } from '../src/lib/client';
+import { normalizeSerial } from '../src/lib/protocol';
 
 function arg(name: string, fallback: string): string {
     const index = process.argv.indexOf(`--${name}`);
@@ -26,14 +27,14 @@ const client = new EnvertechClient({
     },
 });
 
-const timer = setTimeout(() => {
+const timer = timers.setTimeout(() => {
     console.error('No inverter data received. The device may be in standby (no sun).');
     client.stop();
     process.exit(2);
 }, timeoutMs);
 
-client.on('data', (reading) => {
-    clearTimeout(timer);
+client.on('data', reading => {
+    timers.clearTimeout(timer);
     console.log(JSON.stringify(reading, null, 2));
     client.stop();
     process.exit(0);

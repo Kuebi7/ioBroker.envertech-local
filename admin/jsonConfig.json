@@ -5,7 +5,12 @@
         "header": {
             "type": "header",
             "text": "Envertech local TCP",
-            "size": 2
+            "size": 2,
+            "xs": 12,
+            "sm": 12,
+            "md": 12,
+            "lg": 12,
+            "xl": 12
         },
         "hint": {
             "type": "staticText",
@@ -14,7 +19,8 @@
             "xs": 12,
             "sm": 12,
             "md": 12,
-            "lg": 12
+            "lg": 12,
+            "xl": 12
         },
         "host": {
             "type": "text",
@@ -23,7 +29,8 @@
             "xs": 12,
             "sm": 12,
             "md": 6,
-            "lg": 4
+            "lg": 4,
+            "xl": 4
         },
         "port": {
             "type": "number",
@@ -34,7 +41,8 @@
             "xs": 12,
             "sm": 12,
             "md": 6,
-            "lg": 4
+            "lg": 4,
+            "xl": 4
         },
         "serial": {
             "type": "text",
@@ -43,7 +51,8 @@
             "xs": 12,
             "sm": 12,
             "md": 6,
-            "lg": 4
+            "lg": 4,
+            "xl": 4
         },
         "pollInterval": {
             "type": "number",
@@ -55,7 +64,8 @@
             "xs": 12,
             "sm": 12,
             "md": 6,
-            "lg": 4
+            "lg": 4,
+            "xl": 4
         },
         "reconnectInterval": {
             "type": "number",
@@ -66,7 +76,8 @@
             "xs": 12,
             "sm": 12,
             "md": 6,
-            "lg": 4
+            "lg": 4,
+            "xl": 4
         }
     }
 }

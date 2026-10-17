@@ -1,15 +1,46 @@
 {
     "common": {
         "name": "envertech-local",
-        "version": "0.1.1",
+        "version": "0.1.2",
         "news": {
+            "0.1.2": {
+                "en": "Require Node.js 22, add repository CI, and refresh the admin translations.",
+                "de": "Node.js 22 wird vorausgesetzt, die Repository-CI wurde ergänzt und die Admin-Übersetzungen wurden aktualisiert.",
+                "ru": "Требуется Node.js 22, добавлена проверка репозитория и обновлены переводы админки.",
+                "pt": "Exige Node.js 22, adiciona a verificação do repositório e atualiza as traduções do admin.",
+                "nl": "Vereist Node.js 22, voegt repositorycontrole toe en vernieuwt de admin-vertalingen.",
+                "fr": "Exige Node.js 22, ajoute le contrôle du dépôt et met à jour les traductions de l'admin.",
+                "it": "Richiede Node.js 22, aggiunge i controlli del repository e aggiorna le traduzioni admin.",
+                "es": "Requiere Node.js 22, añade las comprobaciones del repositorio y actualiza las traducciones del admin.",
+                "pl": "Wymaga Node.js 22, dodaje kontrolę repozytorium i odświeża tłumaczenia panelu admin.",
+                "uk": "Потрібен Node.js 22, додано перевірку репозиторію та оновлено переклади адмінки.",
+                "zh-cn": "此版本要求 Node.js 22，增加了仓库持续集成检查，并更新了管理界面中的全部翻译。"
+            },
             "0.1.1": {
-                "en": "Fix reconnect after timeout and empty inverterId until first live frame",
-                "de": "Reconnect nach Timeout repariert, Inverter-ID wird sofort aus der MID gesetzt"
+                "en": "Fix reconnect after timeout and set the inverter id before the first live frame.",
+                "de": "Reconnect nach Timeout repariert und die Wechselrichter-ID wird vor dem ersten Live-Frame gesetzt.",
+                "ru": "Исправлено переподключение после таймаута, идентификатор инвертора задаётся до первого кадра.",
+                "pt": "Corrige a reconexão após o tempo limite e define o id do inversor antes do primeiro quadro.",
+                "nl": "Herstel opnieuw verbinden na een time-out en zet het omvormer-id vóór het eerste live frame.",
+                "fr": "Corrige la reconnexion après expiration et définit l'identifiant avant la première trame.",
+                "it": "Corregge la riconnessione dopo il timeout e imposta l'id dell'inverter prima del primo frame.",
+                "es": "Corrige la reconexión tras el tiempo de espera y fija el id del inversor antes del primer marco.",
+                "pl": "Naprawiono ponowne połączenie po limicie czasu i ustawiono identyfikator falownika przed pierwszą ramką.",
+                "uk": "Виправлено повторне з'єднання після тайм-ауту, ідентифікатор інвертора задається до першого кадру.",
+                "zh-cn": "修复超时之后无法重新连接的问题，并在收到第一帧实时数据之前写入逆变器编号。"
             },
             "0.1.0": {
-                "en": "Initial release: local TCP readout without cloud",
-                "de": "Erstes Release: lokales TCP-Auslesen ohne Cloud"
+                "en": "Initial release: read Envertech microinverters locally over TCP without the cloud.",
+                "de": "Erstes Release: Envertech-Mikrowechselrichter lokal per TCP auslesen, ohne Cloud.",
+                "ru": "Первый выпуск: локальное чтение микроинверторов Envertech по TCP без облака.",
+                "pt": "Primeira versão: ler microinversores Envertech localmente por TCP, sem a nuvem.",
+                "nl": "Eerste release: Envertech-micro-omvormers lokaal via TCP uitlezen, zonder cloud.",
+                "fr": "Première version : lecture locale des micro-onduleurs Envertech en TCP, sans cloud.",
+                "it": "Prima versione: lettura locale dei microinverter Envertech via TCP, senza cloud.",
+                "es": "Primera versión: lectura local de microinversores Envertech por TCP, sin la nube.",
+                "pl": "Pierwsze wydanie: lokalny odczyt mikroinwerterów Envertech przez TCP, bez chmury.",
+                "uk": "Перший випуск: локальне зчитування мікроінверторів Envertech через TCP без хмари.",
+                "zh-cn": "首次发布：通过本地 TCP 连接读取 Envertech 微型逆变器的数据，不依赖云端服务。"
             }
         },
         "titleLang": {
@@ -28,15 +59,15 @@
         "desc": {
             "en": "Read Envertech microinverters locally via TCP (no cloud)",
             "de": "Envertech-Mikrowechselrichter lokal per TCP auslesen (ohne Cloud)",
-            "ru": "Read Envertech microinverters locally via TCP (no cloud)",
-            "pt": "Read Envertech microinverters locally via TCP (no cloud)",
-            "nl": "Read Envertech microinverters locally via TCP (no cloud)",
-            "fr": "Read Envertech microinverters locally via TCP (no cloud)",
-            "it": "Read Envertech microinverters locally via TCP (no cloud)",
-            "es": "Read Envertech microinverters locally via TCP (no cloud)",
-            "pl": "Read Envertech microinverters locally via TCP (no cloud)",
-            "uk": "Read Envertech microinverters locally via TCP (no cloud)",
-            "zh-cn": "Read Envertech microinverters locally via TCP (no cloud)"
+            "ru": "Локальное чтение микроинверторов Envertech по TCP без облака",
+            "pt": "Ler microinversores Envertech localmente via TCP, sem nuvem",
+            "nl": "Lees Envertech-micro-omvormers lokaal via TCP, zonder cloud",
+            "fr": "Lire les micro-onduleurs Envertech en local via TCP, sans cloud",
+            "it": "Legge i microinverter Envertech in locale via TCP, senza cloud",
+            "es": "Lee microinversores Envertech en local por TCP, sin nube",
+            "pl": "Odczyt mikroinwerterów Envertech lokalnie przez TCP, bez chmury",
+            "uk": "Локальне зчитування мікроінверторів Envertech через TCP без хмари",
+            "zh-cn": "通过 TCP 在本地读取 Envertech 微型逆变器，无需云端"
         },
         "authors": ["Andreas"],
         "keywords": ["envertech", "envertec", "evt800", "microinverter", "pv", "solar"],
@@ -66,12 +97,12 @@
         },
         "dependencies": [
             {
-                "js-controller": ">=5.0.19"
+                "js-controller": ">=6.0.11"
             }
         ],
         "globalDependencies": [
             {
-                "admin": ">=6.17.12"
+                "admin": ">=7.6.20"
             }
         ]
     },

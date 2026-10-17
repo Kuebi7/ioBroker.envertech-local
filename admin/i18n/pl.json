@@ -1,0 +1,10 @@
+{
+    "Envertech local TCP": "Envertech przez lokalne TCP",
+    "hint": "Falownik musi być w sieci lokalnej i ustawiony jako TCP Server na porcie 14889 w Other Setting. Strona pod adresem IP pokazuje tylko konfigurację Wi-Fi, a nie wartości bieżące. W nocy urządzenie jest często niedostępne.",
+    "host": "Adres IP",
+    "port": "Port TCP",
+    "serial": "Numer seryjny / MID",
+    "serialHelp": "Ośmiocyfrowy MID z lokalnej strony WWW, na przykład 30819660",
+    "pollInterval": "Interwał odpytywania (sekundy)",
+    "reconnectInterval": "Interwał ponownego połączenia (sekundy)"
+}

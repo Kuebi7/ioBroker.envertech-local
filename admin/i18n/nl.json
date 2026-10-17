@@ -1,0 +1,10 @@
+{
+    "Envertech local TCP": "Envertech via lokaal TCP",
+    "hint": "De omvormer moet in het lokale netwerk hangen en onder Other Setting als TCP Server op poort 14889 staan. De webpagina op het IP-adres toont alleen de wifi-instellingen, geen live waarden. 's Nachts is het apparaat vaak onbereikbaar.",
+    "host": "IP-adres",
+    "port": "TCP-poort",
+    "serial": "Serienummer / MID",
+    "serialHelp": "Achtcijferige MID van de lokale webpagina, bijvoorbeeld 30819660",
+    "pollInterval": "Poll-interval (seconden)",
+    "reconnectInterval": "Reconnect-interval (seconden)"
+}

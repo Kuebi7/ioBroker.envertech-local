@@ -4,7 +4,7 @@
     "host": "IP address",
     "port": "TCP port",
     "serial": "Serial / MID",
-    "serialHelp": "8-digit MID from the local web UI, e.g. 30819660",
+    "serialHelp": "Eight-digit MID from the local web UI, for example 30819660",
     "pollInterval": "Poll interval (seconds)",
     "reconnectInterval": "Reconnect interval (seconds)"
 }
